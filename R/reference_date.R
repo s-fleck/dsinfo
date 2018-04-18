@@ -6,10 +6,10 @@
 #' @export
 #'
 reference_date <- function(x){
-  if(is.null(attr(x, 'dsinfo'))){
+  if (is.null(attr(x, "dsinfo"))){
     return(NULL)
   } else {
-    attr(x, 'dsinfo')$reference_date
+    attr(x, "dsinfo")$reference_date
   }
 }
 
@@ -43,7 +43,7 @@ reference_date <- function(x){
 #'  and mutually exclusive (only supply one, not both). If `y` is a `date_xx`
 #'  `q` and `m` must be `NULL`.
 #'
-#' @return `set_reference_date()` and `'reference_date<-'` can be used to
+#' @return `set_reference_date()` and `"reference_date<-"` can be used to
 #'   directlty set the `reference_date` field of the `dsinfo` attribute of
 #'   an R object.
 #'
@@ -78,5 +78,5 @@ has_reference_date <- function(x){
 
 
 is_reference_date <- function(x){
-  inherits(x, c('Date', 'POSIXt', 'Interval', 'date_xx'))
+  inherits(x, c("Date", "POSIXt", "Interval", "date_xx"))
 }

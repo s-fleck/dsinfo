@@ -11,9 +11,11 @@ compact <- function(x){
 
 
 
+
 is.scalar <- function(x){
   identical(length(x), 1L)
 }
+
 
 
 
@@ -23,9 +25,11 @@ is.flag <- function(x){
 
 
 
+
 is_empty <- function(x){
   identical(length(x), 0L)
 }
+
 
 
 

@@ -89,7 +89,7 @@
 #' @export
 #'
 dsinfo <- function(x){
-  attr(x, 'dsinfo')
+  attr(x, "dsinfo")
 }
 
 
@@ -128,11 +128,11 @@ set_dsinfo <- function(
   .add = FALSE
 ){
   # Preconditions
-    for(el in c(name, id, title, description, version)){
+    for (el in c(name, id, title, description, version)){
       stopifnot(is.null(el) || is_scalar_character(el))
     }
 
-    for(el in c(homepage, keywords, profile)){
+    for (el in c(homepage, keywords, profile)){
       stopifnot(is.null(el) || is.character(el))
     }
 
@@ -187,11 +187,12 @@ set_dsinfo <- function(
 
   info <- info[!unlist(lapply(info, is.null))]
 
-  class(info) <- c('dsinfo', 'list')
-  attr(x, 'dsinfo') <- info
+  class(info) <- c("dsinfo", "list")
+  attr(x, "dsinfo") <- info
 
   return(x)
 }
+
 
 
 
@@ -199,7 +200,7 @@ set_dsinfo <- function(
 #' @export
 #'
 `dsinfo<-` <- function(x, value){
-  attr(x, 'dsinfo') <- value
+  attr(x, "dsinfo") <- value
   x
 }
 
@@ -224,28 +225,35 @@ print.dsinfo <- function(x, ...){
   )
 
   if (!is_blank(version)){
-    version <- colt::clt_chr_subtle(paste("(", version, ")", collapse = "", sep = ""))
+    version <-
+      colt::clt_chr_subtle(paste("(", version, ")", collapse = "", sep = ""))
   }
 
 
   r1[["header"]]  <- paste(header_title, version)
 
-  r1[['title']]   <- paste_if_el(x, "title")
-  r1[['desc']]    <- paste_if_el(x, "description", prefix = '\n', suffix = '\n')
+  r1[["title"]]   <- paste_if_el(x, "title")
+  r1[["desc"]]    <- paste_if_el(x, "description", prefix = "\n", suffix = "\n")
 
   if (identical(r1[["desc"]], "")){
     r1[["desc"]] <- "\t"
   }
 
   if (!is.null(x$sources)){
-    r1[["sources"]] <- paste(colt::clt_maybe("sources:"), format_sources(x$sources))
+    r1[["sources"]] <-
+      paste(colt::clt_maybe("sources:"), format_sources(x$sources))
   }
 
   y <- x[!names(x) %in% union(title_els, c("description", "title", "sources"))]
   y <- lapply(y, as.character)
 
   if (length(y) > 0){
-    r2 <- paste0(colt::clt_maybe(paste0(names(y), ":")), "\n  ", colt::clt_chr_subtle(y))
+    r2 <- paste0(
+      colt::clt_maybe(paste0(names(y), ":")),
+      "\n  ",
+      colt::clt_chr_subtle(y)
+    )
+
     res <- c(r1, r2)
   } else {
     res <- r1
@@ -254,9 +262,10 @@ print.dsinfo <- function(x, ...){
 
   res <- res[res != ""]
 
-  invisible(lapply(res, cat, '\n'))
+  invisible(lapply(res, cat, "\n"))
   invisible(x)
 }
+
 
 
 
@@ -270,8 +279,8 @@ paste_if_el <- function(x, els, prefix = NULL, suffix = NULL){
   res <- lapply(res, as.character) # necessary for dates
   res <- unlist(res)
 
-  if(!is.null(res)){
-    paste(prefix, res, suffix, collapse = ' - ', sep = "")
+  if (!is.null(res)){
+    paste(prefix, res, suffix, collapse = " - ", sep = "")
   } else {
     ""
   }
@@ -283,8 +292,3 @@ paste_if_el <- function(x, els, prefix = NULL, suffix = NULL){
 is_dsinfo_name <- function(x){
   isTRUE(grepl("^[A-Za-z0-9_\\.-]*$", x)) && is.scalar(x)
 }
-
-
-
-
-

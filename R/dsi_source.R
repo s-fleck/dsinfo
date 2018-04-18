@@ -109,10 +109,19 @@ format_source <- function(x){
     title <- x$title
   }
 
-  paths  <- vapply(x$path,  function(x.) colt::clt_chr_subtle(paste("   -", x.)), "")
-  emails <- vapply(x$email, function(x.) colt::clt_chr_subtle(paste("   -", x.)), "")
+  paths  <- vapply(
+    x$path,
+    function(x.) colt::clt_chr_subtle(paste("   -", x.)),
+    ""
+  )
 
-  if(!is_empty(emails)) emails <- paste(emails)
+  emails <- vapply(
+    x$email,
+    function(x.) colt::clt_chr_subtle(paste("   -", x.)),
+    ""
+  )
+
+  if (!is_empty(emails)) emails <- paste(emails)
 
   c(title, paths, emails)
 }
