@@ -23,7 +23,7 @@ reference_date <- function(x){
 `reference_date<-` <- function(x, value){
   stopifnot(is_reference_date(value))
 
-  dsi <- hammr::dsinfo(x)
+  dsi <- dsinfo(x)
 
   if (inherits(dsi, "dsinfo")){
     dsi$reference_date <- value
@@ -51,11 +51,11 @@ reference_date <- function(x){
 #' @export
 #'
 set_reference_date <- function(x, y, q = NULL, m = NULL){
-  if(is_date_xx(y)){
+  if (dint::is_date_xx(y)){
     stopifnot(is.null(q) && is.null(m))
     value <- y
   } else {
-    value <- make_date_xx(y, q, m)
+    value <- dint::make_date_xx(y, q, m)
   }
 
   x <- set_dsinfo(x, reference_date = value)
@@ -71,7 +71,7 @@ set_reference_date <- function(x, y, q = NULL, m = NULL){
 #' @export
 #'
 has_reference_date <- function(x){
-  hammr::is_date_xx(reference_date(x))
+  dint::is_date_xx(reference_date(x))
 }
 
 

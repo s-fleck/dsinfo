@@ -20,3 +20,15 @@ is.scalar <- function(x){
 is.flag <- function(x){
   is.scalar(x) & is.logical(x)
 }
+
+
+
+is_empty <- function(x){
+  identical(length(x), 0L)
+}
+
+
+
+is_blank <- function(x){
+  trimws(x) == ""
+}

@@ -13,7 +13,7 @@ test_that("dsinfo works as expected", {
       version = "0.0.1",
       reference_date = as.Date("2016-01-01"),
 
-      # hammr optional
+      # optional
       source_date = as.Date("2016-01-01"),
       source_path = "/",
 
@@ -39,7 +39,7 @@ test_that("dsinfo works as expected", {
 
   expect_silent(set_dsinfo(x, reference_date = Sys.Date()))
   expect_silent(set_dsinfo(x, reference_date = lubridate::interval(Sys.Date(), Sys.Date())))  #nolint
-  expect_silent(set_dsinfo(x, reference_date = as_date_yq(Sys.Date())))
+  expect_silent(set_dsinfo(x, reference_date = dint::as_date_yq(Sys.Date())))
   expect_error(set_dsinfo(x, reference_date = "x"))
 
 
@@ -63,7 +63,7 @@ test_that("reference_date works as expected", {
   x <- 1L
 
   expect_silent(
-    reference_date(x) <- as_date_ym(201612)
+    reference_date(x) <- dint::as_date_ym(201612)
   )
 
   expect_identical(

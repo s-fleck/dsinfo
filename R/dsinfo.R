@@ -59,7 +59,7 @@
 #' @param created a Datetime scalar
 #'
 #' @param reference_date Reference date for the data set. May be a [base::Date],
-#'   [base::POSIXt], [hammr::date_xx] or a [lubridate::period].
+#'   [base::POSIXt], [dint::date_xx] or a [lubridate::period].
 #'
 #' @param image Provided for compatability with the Data Package standard. An
 #'   image to use for this data package. For example, when showing the package
@@ -103,7 +103,7 @@ dsinfo <- function(x){
 set_dsinfo <- function(
   x,
 
-  # hammr recommended
+  # recommended
   id = NULL,
   name = NULL,
   reference_date = NULL,
@@ -153,7 +153,7 @@ set_dsinfo <- function(
 
     info <- c(
       list(
-        # hammr recommended
+        # recommended
         id = id,
         name = name,
         reference_date = reference_date,
@@ -195,14 +195,7 @@ set_dsinfo <- function(
 
 
 
-#' Title
-#'
-#' @param x Any \R object
-#' @param value a `dsinfo` object.
-#'
-#' @rdname
-#'
-#' @return
+#' @rdname dsinfo
 #' @export
 #'
 `dsinfo<-` <- function(x, value){
@@ -248,10 +241,8 @@ print.dsinfo <- function(x, ...){
     r1[["sources"]] <- paste(colt::clt_maybe("sources:"), format_sources(x$sources))
   }
 
-
-
-  y <- x[!names(x) %in% union(title_els, c("description", "title", "sources"))] %>%
-    lapply(as.character)
+  y <- x[!names(x) %in% union(title_els, c("description", "title", "sources"))]
+  y <- lapply(y, as.character)
 
   if (length(y) > 0){
     r2 <- paste0(colt::clt_maybe(paste0(names(y), ":")), "\n  ", colt::clt_chr_subtle(y))
@@ -275,9 +266,9 @@ paste_if_el <- function(x, els, prefix = NULL, suffix = NULL){
     names(x)
   )
 
-  res <- x[sel] %>%
-    lapply(as.character) %>%  # necessary for dates
-    unlist()
+  res <- x[sel]
+  res <- lapply(res, as.character) # necessary for dates
+  res <- unlist(res)
 
   if(!is.null(res)){
     paste(prefix, res, suffix, collapse = ' - ', sep = "")

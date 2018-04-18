@@ -88,10 +88,12 @@ dsi_sources_from_paths <- function(paths){
 
 
 format_sources <- function(x, indent = "  "){
-  lapply(x, format_source) %>%
-    unlist() %>%
-    paste0(collapse = paste0("\n", indent)) %>%
-    paste0("\n", indent, .)
+  x <- lapply(x, format_source)
+  x <- unlist(x)
+  x <- paste0(x, collapse = paste0("\n", indent))
+  x <- paste0("\n", indent, x)
+
+  x
 }
 
 
@@ -110,7 +112,7 @@ format_source <- function(x){
   paths  <- vapply(x$path,  function(x.) colt::clt_chr_subtle(paste("   -", x.)), "")
   emails <- vapply(x$email, function(x.) colt::clt_chr_subtle(paste("   -", x.)), "")
 
-  if(!isit::is_empty(emails)) emails <- paste(emails)
+  if(!is_empty(emails)) emails <- paste(emails)
 
   c(title, paths, emails)
 }
