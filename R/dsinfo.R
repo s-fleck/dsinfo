@@ -214,7 +214,7 @@ print.dsinfo <- function(x, ...){
   r1 <- character()
 
   if ("reference_date" %in% names(x)){
-    x[["reference_date"]] <- as.character(x[["reference_date"]])
+    x[["reference_date"]] <- format(x[["reference_date"]])
   }
 
   header_title <- paste(compact(x[c("id", "name")]), collapse = ": ")
@@ -231,7 +231,6 @@ print.dsinfo <- function(x, ...){
 
 
   r1[["header"]]  <- paste(header_title, version)
-
   r1[["title"]]   <- paste_if_el(x, "title")
   r1[["desc"]]    <- paste_if_el(x, "description", prefix = "\n", suffix = "\n")
 
