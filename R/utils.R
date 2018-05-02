@@ -6,7 +6,7 @@ is_scalar_character <- function(x){
 
 
 compact <- function(x){
-  x[!is.null(x)]
+  x[!vapply(x, is.null, FALSE)]
 }
 
 
