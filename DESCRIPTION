@@ -1,11 +1,11 @@
 Type: Package
 Package: dsinfo
 Title: Metadata for R Objects
-Version: 0.0.1.9002
+Version: 0.0.1.9003
 Authors@R: person("Stefan", "Fleck", email = "stefan.b.fleck@gmail.com", role = c("aut", "cre"))
 Maintainer: Stefan Fleck <stefan.b.fleck@gmail.com>
 Description: 
-    Add metadata inspired by the 'Data Package' standard any to R object. If you want to work with
+    Add metadata inspired by the 'Data Package' standard to any to R object. If you want to work with
     actual 'Data Packages' you are likely looking for the package *datapackage-r* instead.
 License: MIT + file LICENSE
 Imports: 

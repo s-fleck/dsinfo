@@ -1,12 +1,18 @@
 #' Set and Display Info about a Data Set
 #'
-#' Attaches a list as the attribute `dsinfo` to `x`. `dsinfo` may contain
-#' any kind of R object. The parameters section of this help file describes
-#' a sensible selection of possible metadata elements, heavyly inspired by
-#' https://specs.frictionlessdata.io/data-package/ with some minor
-#' modifications.
+#' Add metadata inspired by the 'Data Package' standard to any to \R object. A
+#' `dsinfo` attribute may contain a `list` of arbitrary elements; however, it
+#' is highly recommended to stick to the elements outlined in the *Arguments*
+#' section of this help file.
 #'
-#' @param x any R object
+#' `set_dsinfo()` and `dsinfo<-()` can be used to set the `dsinfo` attribute
+#' of an \R Object. `update_dsinfo()` is similar but only updates metadata
+#' elements that were changed or added. It is equivalent to
+#' `set_desinfo(..., .add = TRUE)`. `dsinfo()` can be used to access said
+#' attribute.
+#'
+#'
+#' @param x any \R object
 #'
 #' @param name A short url-usable (and preferably human-readable) name of the
 #'   dataset This MUST be lower-case and contain only alphanumeric characters
@@ -77,16 +83,17 @@
 #' @param ... any number of arbitrary metadata elements that will also be
 #'   attached to dsinfo.
 #'
-#' @return `dsinfo()` returns the `desinfo` attribute of `x` (or `NULL` if there
-#'   is none).
-#'
 #' @param .add if `FALSE` (default), the complete `dsinfo` attribute is
 #'   replaced, dropping values that are not present in the new attribute.
 #'   If `TRUE`, the new values are added to the existing `dsinfo`
 #'   attribute (values that exist in the original and new dsinfo are still
 #'   replaced by the new values).
 #'
+#' @return `dsinfo()` returns the `dsinfo` attribute of `x` (or `NULL` if there
+#' is none).
+#'
 #' @export
+#' @import dint
 #'
 dsinfo <- function(x){
   attr(x, "dsinfo")
@@ -97,7 +104,8 @@ dsinfo <- function(x){
 
 #' @rdname dsinfo
 #'
-#' @return `set_dsinfo()` returns `x` with an additional `dsinfo` attribute.
+#' @return `set_dsinfo()` and `update_dsinfo()` return `x` with an additional
+#'   `dsinfo` attribute.
 #' @export
 #'
 set_dsinfo <- function(
@@ -191,6 +199,15 @@ set_dsinfo <- function(
   attr(x, "dsinfo") <- info
 
   return(x)
+}
+
+
+
+
+#' @rdname dsinfo
+#' @export
+update_dsinfo <- function(...){
+  set_dsinfo(..., .add = TRUE)
 }
 
 
