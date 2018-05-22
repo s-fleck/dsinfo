@@ -2,6 +2,7 @@
 
 #' Create sources for dsinfo
 #'
+#' A source can be a file system path or a person with an email address.
 #'
 #' `dsi_source()` is a constructor for the component objects that make up a
 #' `dsi_sources()` object (a single source file or person).
@@ -47,7 +48,7 @@ dsi_sources <- function(...){
 #'
 dsi_sources_list <- function(sources){
   stopifnot(all(
-    vapply(sources, function(x) inherits(x, "dsinfo_source"), FALSE)
+    vapply(sources, function(x) inherits(x, "dsinfo_source") || inherits(x, "dsinfo_sources"), FALSE)
   ))
   attr(sources, "class") <- c("dsinfo_sources", "list")
   sources
@@ -87,23 +88,58 @@ dsi_sources_from_paths <- function(paths){
 
 
 
-format_sources <- function(x, indent = "  "){
-  x <- lapply(x, format_source)
-  x <- unlist(x)
-  x <- paste0(x, collapse = paste0("\n", indent))
-  x <- paste0("\n", indent, x)
 
-  x
+
+# printing ----------------------------------------------------------------
+
+#' @export
+print.dsinfo_source <- function(x){
+  cat_lines(format(x))
+  invisible(x)
 }
 
 
 
-format_source <- function(x){
+
+#' @export
+print.dsinfo_sources <- function(x){
+  cat_lines(format(x))
+  invisible(x)
+}
+
+
+
+
+#' @export
+format.dsinfo_sources <- function(x){
+  r <- lapply(x, format)
+  r <- unlist(r)
+  r
+}
+
+
+
+
+#' @export
+format.dsinfo_source <- function(
+  x,
+  colors = TRUE
+){
+  col <- list()
+
+  if (colors){
+    col$path  <- colt::clt_chr_subtle
+    col$title <- colt::clt_chr_subtle
+  } else {
+    col$path <- identity
+    col$title <- identity
+  }
+
 
   if (!is.null(x$date)){
     title <- paste(
       x$title,
-      colt::clt_chr_subtle(paste0("(", x$date, ")"))
+      col$title(paste0("(", x$date, ")"))
     )
   } else {
     title <- x$title
@@ -111,13 +147,13 @@ format_source <- function(x){
 
   paths  <- vapply(
     x$path,
-    function(x.) colt::clt_chr_subtle(paste("   -", x.)),
+    function(x.) col$path(paste("   -", x.)),
     ""
   )
 
   emails <- vapply(
     x$email,
-    function(x.) colt::clt_chr_subtle(paste("   -", x.)),
+    function(x.) col$path(paste("   -", x.)),
     ""
   )
 

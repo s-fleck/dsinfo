@@ -36,3 +36,11 @@ is_empty <- function(x){
 is_blank <- function(x){
   trimws(x) == ""
 }
+
+
+
+
+cat_lines <- function(x){
+  stopifnot(all(vapply(x, is.character, FALSE)))
+  cat(paste0(x, collapse = "\n"))
+}

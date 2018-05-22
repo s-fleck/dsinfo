@@ -13,10 +13,6 @@ test_that("dsinfo works as expected", {
       version = "0.0.1",
       reference_date = as.Date("2016-01-01"),
 
-      # optional
-      source_date = as.Date("2016-01-01"),
-      source_path = "/",
-
       # data package recommended
       license = "CC",
 
@@ -28,6 +24,11 @@ test_that("dsinfo works as expected", {
       contributors = "Foobert Bar",
       keywords = c("test", "data"),
       created = Sys.time(),
+      sources = dsi_sources(
+        dsi_source("a test source", path = tempfile(), email = "blah@blubb.at", date = Sys.Date()),
+        dsi_source("a test source", email = "blah@blubb.at", date = Sys.Date()),
+        dsi_source("a test source", path = tempfile())
+      ),
 
 
       # data package-compat
@@ -36,6 +37,8 @@ test_that("dsinfo works as expected", {
       blah = "blubb"
     )
   )
+
+  dsinfo(x)
 
   expect_silent(set_dsinfo(x, reference_date = Sys.Date()))
   expect_silent(set_dsinfo(x, reference_date = lubridate::interval(Sys.Date(), Sys.Date())))  #nolint
@@ -68,7 +71,7 @@ test_that("reference_date works as expected", {
 
   expect_identical(
     reference_date(x),
-    date_ym(2016, 12)
+    dint::date_ym(2016, 12)
   )
 
   expect_true(

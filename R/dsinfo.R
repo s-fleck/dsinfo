@@ -224,11 +224,24 @@ update_dsinfo <- function(...){
 
 
 
+# printing ----------------------------------------------------------------
+
 #' @export
 print.dsinfo <- function(x, ...){
+  cat_lines(format(x))
+  invisible(x)
+}
 
+
+
+
+#' @export
+format.dsinfo <- function(
+  x,
+  color = TRUE
+){
   title_els <- c("id", "name", "reference_date", "version")
-  r1 <- character()
+  r1 <- list()
 
   if ("reference_date" %in% names(x)){
     x[["reference_date"]] <- format(x[["reference_date"]])
@@ -257,8 +270,9 @@ print.dsinfo <- function(x, ...){
 
   if (!is.null(x$sources)){
     r1[["sources"]] <-
-      paste(colt::clt_maybe("sources:"), format_sources(x$sources))
+      c(colt::clt_maybe("sources:"), paste0(" ", format(x$sources)))
   }
+
 
   y <- x[!names(x) %in% union(title_els, c("description", "title", "sources"))]
   y <- lapply(y, as.character)
@@ -277,13 +291,14 @@ print.dsinfo <- function(x, ...){
 
 
   res <- res[res != ""]
-
-  invisible(lapply(res, cat, "\n"))
-  invisible(x)
+  res <- unlist(res)
+  res
 }
 
 
 
+
+# utils -------------------------------------------------------------------
 
 paste_if_el <- function(x, els, prefix = NULL, suffix = NULL){
   sel <- grep(
