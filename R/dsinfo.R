@@ -238,7 +238,7 @@ print.dsinfo <- function(x, ...){
 #' @export
 format.dsinfo <- function(
   x,
-  color = TRUE
+  ...
 ){
   title_els <- c("id", "name", "reference_date", "version")
   r1 <- list()

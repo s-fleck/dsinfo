@@ -39,10 +39,7 @@ test_that("dsinfo sources print nicely", {
     name = "iris_dataset",
     title = "The Iris Dataset"
   )
-  dsinfo(x)
 
-
-  x <- gvtool::read_archive("road-rda/gvk_plausapp/gvk_plausapp_2017-2018.2018-04-16.rds")
   dsinfo(x)
 
 })
