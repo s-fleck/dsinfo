@@ -1,7 +1,7 @@
 Type: Package
 Package: dsinfo
 Title: Metadata for R Objects
-Version: 0.0.1.9004
+Version: 0.0.1.9005
 Authors@R: person("Stefan", "Fleck", email = "stefan.b.fleck@gmail.com", role = c("aut", "cre"))
 Maintainer: Stefan Fleck <stefan.b.fleck@gmail.com>
 Description: 
@@ -10,8 +10,7 @@ Description:
 License: MIT + file LICENSE
 Imports: 
     colt,
-    dint,
-    magrittr
+    dint
 Suggests: 
     testthat
 Encoding: UTF-8

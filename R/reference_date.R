@@ -58,7 +58,7 @@ set_reference_date <- function(x, y, q = NULL, m = NULL){
     value <- dint::make_date_xx(y, q, m)
   }
 
-  x <- set_dsinfo(x, reference_date = value)
+  update_dsinfo(x, reference_date = value)
 }
 
 
