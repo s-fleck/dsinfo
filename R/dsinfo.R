@@ -144,10 +144,11 @@ set_dsinfo <- function(
       stopifnot(is.null(el) || is.character(el))
     }
 
-    stopifnot(is.null(reference_date) || is_reference_date(reference_date) )
-    stopifnot(is.null(name) || is_dsinfo_name(name))
-    stopifnot(is.flag(.add))
-    # license
+    stopifnot(
+      is.null(reference_date) || is_reference_date(reference_date),
+      is.null(name) || is_dsinfo_name(name),
+      is.flag(.add)
+    )
 
 
   # Processing
@@ -194,11 +195,17 @@ set_dsinfo <- function(
 
 
   info <- info[!unlist(lapply(info, is.null))]
-
   class(info) <- c("dsinfo", "list")
-  attr(x, "dsinfo") <- info
 
-  return(x)
+  if (is_data.table(x)){
+    x <- data.table::copy(x)
+    data.table::setattr(x, "dsinfo", info)
+  } else {
+    dsinfo(x) <- info
+  }
+
+
+  x
 }
 
 

@@ -138,3 +138,21 @@ test_that("dsinfo .add = TRUE works as expected", {
   expect_identical(dsinfo(x)$title, "iris data set")
   expect_identical(dsinfo(x)$name,  "iris2")
 })
+
+
+
+
+test_that("dsinfo doesn't corrupt selfref of data.table", {
+  dt <- data.table::as.data.table(iris)
+
+  x <- set_dsinfo(
+    dt,
+    name = "iris",
+    title = "iris data set",
+    reference_date = Sys.Date(),
+    sources = dsi_source(title = "wd", path = getwd() ),
+    .add = TRUE
+  )
+
+  expect_equal(data.table:::selfrefok(x), 1)
+})
