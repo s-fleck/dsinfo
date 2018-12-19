@@ -38,15 +38,26 @@ test_that("dsinfo works as expected", {
     )
   )
 
-  dsinfo(x)
 
   expect_silent(set_dsinfo(x, reference_date = Sys.Date()))
-  expect_silent(set_dsinfo(x, reference_date = lubridate::interval(Sys.Date(), Sys.Date())))  #nolint
+
   expect_silent(set_dsinfo(x, reference_date = dint::as_date_yq(Sys.Date())))
   expect_error(set_dsinfo(x, reference_date = "x"))
 
 
   y <- set_dsinfo(1L, homepage = "www.zombo.com")
+})
+
+
+
+test_that("test if reference data can be a lubridate interval", {
+
+  x <- iris
+
+  if (!requireNamespace("lubridate")){
+    skip("Test requires lubridate")
+  }
+  expect_silent(set_dsinfo(x, reference_date = lubridate::interval(Sys.Date(), Sys.Date())))  #nolint
 })
 
 
@@ -100,7 +111,7 @@ test_that("test print method", {
     sources = dsi_source(title = "wd", path = getwd() )
   )
 
-  dsinfo(x)
+  expect_output(print(dsinfo(x)))
 
 
   x <- set_dsinfo(
@@ -114,7 +125,7 @@ test_that("test print method", {
   )
 
 
-  dsinfo(x)
+  expect_output(print(dsinfo(x)))
 })
 
 
