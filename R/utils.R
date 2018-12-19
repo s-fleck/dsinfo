@@ -47,7 +47,7 @@ cat_lines <- function(x){
 
 
 
+
 is_data.table <- function(x){
-  requireNamespace("data.table", quietly = TRUE) &&
-  data.table::is.data.table(x)
+  inherits(x, "data.table")
 }

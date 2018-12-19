@@ -236,6 +236,7 @@ update_dsinfo <- function(...){
 #' @export
 print.dsinfo <- function(x, ...){
   cat_lines(format(x))
+  cat("\n")
   invisible(x)
 }
 
