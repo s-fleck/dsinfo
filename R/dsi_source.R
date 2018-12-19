@@ -130,14 +130,10 @@ format.dsinfo_source <- function(
   x,
   ...
 ){
-  col <- list()
-  col$path  <- colt::clt_chr_subtle
-  col$title <- colt::clt_chr_subtle
-
   if (!is.null(x$date)){
     title <- paste(
       x$title,
-      col$title(paste0("(", x$date, ")"))
+      style_subtle(paste0("(", x$date, ")"))
     )
   } else {
     title <- x$title
@@ -145,13 +141,13 @@ format.dsinfo_source <- function(
 
   paths  <- vapply(
     x$path,
-    function(x.) col$path(paste("  -", x.)),
+    function(x.) style_subtle(paste("  -", x.)),
     ""
   )
 
   emails <- vapply(
     x$email,
-    function(x.) col$path(paste("  -", x.)),
+    function(x.) style_subtle(paste("  -", x.)),
     ""
   )
 

@@ -256,7 +256,7 @@ format.dsinfo <- function(
   }
 
   header_title <- paste(compact(x[c("id", "name")]), collapse = ": ")
-  header_title <- colt::clt_chr_accent(header_title)
+  header_title <- style_accent(header_title)
   version <- paste(
     format(compact(x[c("version", "reference_date")])),
     collapse = " - "
@@ -264,7 +264,7 @@ format.dsinfo <- function(
 
   if (!is_blank(version)){
     version <-
-      colt::clt_chr_subtle(paste("(", version, ")", collapse = "", sep = ""))
+      style_subtle(paste("(", version, ")", collapse = "", sep = ""))
   }
 
 
@@ -278,7 +278,7 @@ format.dsinfo <- function(
 
   if (!is.null(x$sources)){
     r1[["sources"]] <-
-      c(colt::clt_maybe("sources:"), paste0(" ", format(x$sources)))
+      c(style_warning("sources:"), paste0(" ", format(x$sources)))
   }
 
 
@@ -287,9 +287,9 @@ format.dsinfo <- function(
 
   if (length(y) > 0){
     r2 <- paste0(
-      colt::clt_maybe(paste0(names(y), ":")),
+      style_warning(paste0(names(y), ":")),
       "\n  ",
-      colt::clt_chr_subtle(y)
+      style_subtle(y)
     )
 
     res <- c(r1, r2)
