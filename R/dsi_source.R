@@ -99,7 +99,7 @@ dsi_sources_from_paths <- function(paths){
 
 #' @export
 print.dsinfo_source <- function(x, ...){
-  cat_lines(format(x))
+  cat(format(x), sep = "\n")
   invisible(x)
 }
 
@@ -108,7 +108,7 @@ print.dsinfo_source <- function(x, ...){
 
 #' @export
 print.dsinfo_sources <- function(x, ...){
-  cat_lines(format(x))
+  cat(format(x), sep = "\n")
   invisible(x)
 }
 
@@ -117,9 +117,7 @@ print.dsinfo_sources <- function(x, ...){
 
 #' @export
 format.dsinfo_sources <- function(x, ...){
-  r <- lapply(x, format)
-  r <- unlist(r)
-  r
+  unlist(lapply(x, format))
 }
 
 

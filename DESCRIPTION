@@ -1,8 +1,13 @@
 Type: Package
 Package: dsinfo
 Title: Metadata for R Objects
-Version: 0.0.1.9006
-Authors@R: person("Stefan", "Fleck", email = "stefan.b.fleck@gmail.com", role = c("aut", "cre"))
+Version: 0.0.1.9007
+Authors@R: 
+    person(given = "Stefan",
+           family = "Fleck",
+           role = c("aut", "cre"),
+           email = "stefan.b.fleck@gmail.com",
+           comment = c(ORCID = "0000-0003-3344-9851"))
 Maintainer: Stefan Fleck <stefan.b.fleck@gmail.com>
 Description: 
     Add metadata inspired by the 'Data Package' standard to any to R object. 

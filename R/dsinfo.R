@@ -27,6 +27,9 @@
 #'   As a corollary, the name also SHOULD NOT include an indication of time
 #'   range covered.
 #'
+#'   **For \R I do not recommend using the name attribute. Assign an S3 class
+#'   that fullfills the same function instead**
+#'
 #' @param id A property reserved for globally unique identifiers. Examples of
 #'   identifiers that are unique include UUIDs and DOIs.
 #'
@@ -147,7 +150,7 @@ set_dsinfo <- function(
     stopifnot(
       is.null(reference_date) || is_reference_date(reference_date),
       is.null(name) || is_dsinfo_name(name),
-      is.flag(.add)
+      is_bool(.add)
     )
 
 
@@ -197,7 +200,7 @@ set_dsinfo <- function(
   info <- info[!unlist(lapply(info, is.null))]
   class(info) <- c("dsinfo", "list")
 
-  if (is_data.table(x)){
+  if (inherits(x, "data.table")){
     x <- data.table::copy(x)
     data.table::setattr(x, "dsinfo", info)
   } else {
@@ -235,7 +238,7 @@ update_dsinfo <- function(...){
 
 #' @export
 print.dsinfo <- function(x, ...){
-  cat_lines(format(x))
+  cat(format(x), sep = "\n")
   cat("\n")
   invisible(x)
 }
@@ -329,5 +332,5 @@ paste_if_el <- function(x, els, prefix = NULL, suffix = NULL){
 
 
 is_dsinfo_name <- function(x){
-  isTRUE(grepl("^[A-Za-z0-9_\\.-]*$", x)) && is.scalar(x)
+  is_scalar(x) && isTRUE(grepl("^[A-Za-z0-9_\\.-]*$", x))
 }
