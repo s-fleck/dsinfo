@@ -1,0 +1,52 @@
+# wer soll Emails bekommen? mehrere Email-Adressen sind möglich
+# falls fehlend wird versucht, die Email des Maintainers aus DESCRIPTION zu holen (falls es ein Paket ist)
+mail:
+  - stefan.fleck@statistik.gv.at
+
+# im Block "pkgs" koennen Pakete angegeben werden, die fuer den Build benoetigt werden
+pkgs:
+
+  # R Pakete die via install.packages() installiert werden
+  r:
+    - roxygen2
+    - knitr
+    - testthat
+
+# r: die R-library mit zusätzlich installierten Paketen
+# latex: Falls tinytex bereits installiert wurde werden die notwendigen Files behalten
+cache:
+  - r
+
+# block "features":
+# tinytex: (logical) soll tinytex installiert werden?
+features:
+  tinytex: false
+
+# Im Block "pkg_options" werden Optionen angegeben, die während dem
+# Builden, Checken und Testen eines Pakets verwendet werden
+# Falls es sind um kein R-Paket handelt, werden diese Optionen ignoriert
+pkg_options:
+  # block "build":
+  # suggests: (logical) falls `false` werden Pakete in `suggests` nicht installiert (default true)
+  # skip_vignettes: (logical) falls `true` werden etwaige Vignetten nicht gebaut (default false)
+  build:
+    suggests: true
+    skip_vignettes: true
+
+  # block "checks":
+  # ignore_warnings: (logical) sollen Warnings beim Checken des Pakets ignoriert werden? (default false)
+  # ignore_errors: (logical) sollen Fehler beim Checken des Pakets ignoriert werden? (default false)
+  checks:
+    ignore_warnings: true
+    ignore_errors: false
+
+  # block "tests":
+  # skip: (logical) falls `true` werden tests übersprungen
+  tests:
+    skip: false
+
+# Der "ssh_deploy" Block erlaubt es Optionen fuer ein Deployment von Daten via rsync anzugeben.
+# Falls der Block fehlt, wird nichts kopiert.
+deploy:
+  pkgdown: false
+  artifactory: true

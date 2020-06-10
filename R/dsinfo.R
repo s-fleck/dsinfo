@@ -28,7 +28,7 @@
 #'   range covered.
 #'
 #'   **For \R I do not recommend using the name attribute. Assign an S3 class
-#'   that fullfills the same function instead**
+#'   that fullfills the same criteria instead**
 #'
 #' @param id A property reserved for globally unique identifiers. Examples of
 #'   identifiers that are unique include UUIDs and DOIs.
@@ -106,11 +106,12 @@ dsinfo <- function(x){
 
 
 #' @rdname dsinfo
-#'
-#' @return `set_dsinfo()` and `update_dsinfo()` return `x` with an additional
-#'   `dsinfo` attribute.
+#' @return `set_dsinfo()`, `update_dsinfo()`, and `set_source_script()` return
+#'   `x` with an additional `dsinfo` attribute.
 #' @export
-#'
+#' @example
+#' x <- set_dsinfo(iris, "i001", "iris-dataset", title = "The iris dataset")
+#' dsinfo(x)
 set_dsinfo <- function(
   x,
 
@@ -233,6 +234,49 @@ update_dsinfo <- function(...){
 
 
 
+#' `set_source_script()` automatically adds the current script as a source
+#'
+#' @param x any \R object
+#' @inheritParams dsi_source
+#' @rdname dsinfo
+#'
+#' @export
+#' @examples
+#' x <- set_source_script(iris)
+#' dsinfo(x)
+set_source_script <- function(
+  x,
+  email = NULL,
+  path = get_source_script(),
+  title = basename(path),
+  date = Sys.time()
+){
+  source_script <- dsinfo::dsi_source(
+    title = title,
+    path = path,
+    date = date,
+    email = email
+  )
+
+  attr(source_script, "auto_source_script") <-TRUE
+
+  ori <- dsinfo(x)$sources
+  rem <- vapply(ori, function(.) isTRUE(attr(., "auto_source_script")), logical(1))
+  ori <- ori[!rem]
+
+  if (length(ori)){
+    src <- dsi_sources(dsi_sources_list(ori), source_script)
+  } else {
+    src <- dsi_sources(source_script)
+  }
+
+  update_dsinfo(
+    x,
+    sources = src
+  )
+}
+
+
 
 # printing ----------------------------------------------------------------
 
@@ -334,3 +378,36 @@ paste_if_el <- function(x, els, prefix = NULL, suffix = NULL){
 is_dsinfo_name <- function(x){
   is_scalar(x) && isTRUE(grepl("^[A-Za-z0-9_\\.-]*$", x))
 }
+
+
+
+
+#' Get the current script
+#'
+#' Tries to guess the path of the currently executing \R script .
+#'
+#' @return `character` scalar. the path of the current script.
+#' @export
+#' @examples
+#' get_source_script()
+get_source_script <- function(){
+  cmdArgs <- commandArgs(trailingOnly = FALSE)
+  needle  <- "--file="
+  match   <- grepl(needle, cmdArgs)
+
+  if (any(match)) {
+    res <- try(path_tidy(sub(needle, "", cmdArgs[match])))
+
+  } else {
+    res <- try(path_tidy(sys.frames()[[1]]$ofile))
+  }
+
+  if (is_try_error(res) || !length(res))
+    res <- try(rstudioapi::getSourceEditorContext()$path)
+
+  if (is_try_error(res))
+    res <- "unknown"
+
+  res
+}
+

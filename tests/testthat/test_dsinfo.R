@@ -167,3 +167,33 @@ test_that("dsinfo doesn't corrupt selfref of data.table", {
 
   expect_equal(data.table:::selfrefok(x), 1)
 })
+
+
+
+
+test_that("set_source_script works", {
+  tf <- tempfile()
+  on.exit(unlink(tf))
+  x <- iris
+
+  d1 <- as.Date("2019-01-01")
+  d2 <- as.Date("2019-01-02")
+
+  # setting source script works
+  res <- dsinfo::set_source_script(x)
+  expect_length(dsinfo(res)$sources, 1)
+
+  # set_dsinfo resets the sources again
+  res <- dsinfo::set_dsinfo(res, source = dsinfo::dsi_sources_from_paths(c(tf, tf)))
+  expect_length(dsinfo(res)$sources, 2)
+
+  # setting source script does not remove other sources
+  res <- dsinfo::set_source_script(res, date = d1)
+  expect_length(dsinfo(res)$sources, 3)
+  expect_identical(dsinfo(res)$sources[[1]]$date, d1)
+
+  # setting source script twice updates the source script
+  res <- dsinfo::set_source_script(res, date = d2)
+  expect_length(dsinfo(res)$sources, 3)
+  expect_identical(dsinfo(res)$sources[[1]]$date, d2)
+})

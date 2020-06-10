@@ -1,5 +1,3 @@
-
-
 #' Create sources for dsinfo
 #'
 #' A source can be a file system path or a person with an email address.
@@ -61,7 +59,6 @@ dsi_sources <- function(...){
 #' @rdname dsi_source
 #'
 dsi_sources_list <- function(sources){
-
   sel1 <- vapply(sources, is_dsinfo_source, FALSE)
   sel2 <- vapply(sources, is_dsinfo_sources, FALSE)
   stopifnot(all(sel1 | sel2))
@@ -91,6 +88,7 @@ dsi_sources_from_paths <- function(paths){
     })
   )
 }
+
 
 
 
@@ -156,6 +154,9 @@ format.dsinfo_source <- function(
 
 
 
+# is ----------------------------------------------------------------------
+
+
 
 is_dsinfo_source <- function(x){
   inherits(x, "dsinfo_source")
@@ -167,3 +168,6 @@ is_dsinfo_source <- function(x){
 is_dsinfo_sources <- function(x){
   inherits(x, "dsinfo_sources")
 }
+
+
+

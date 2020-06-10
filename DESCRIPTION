@@ -1,7 +1,7 @@
 Type: Package
 Package: dsinfo
 Title: Metadata for R Objects
-Version: 0.0.1.9008
+Version: 0.0.2
 Authors@R: 
     person(given = "Stefan",
            family = "Fleck",
@@ -19,8 +19,10 @@ Imports:
 Suggests: 
     crayon,
     testthat,
-    data.table
+    data.table,
+    rstudioapi,
+    lubridate
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.0
