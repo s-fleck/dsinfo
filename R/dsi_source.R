@@ -75,16 +75,14 @@ dsi_sources_list <- function(sources){
 #' `dsi_sources_from_paths()` is a helper function to automatically creates a
 #' `dsi_sources` object from file system paths.
 #'
-#' @export
 #' @param paths `character` vector of file system paths
 #' @return `dsi_sources_from_paths` returns a `dsi_sources` object.
 #' @rdname dsi_source
-#'
-#'
-dsi_sources_from_paths <- function(paths){
+#' @export
+dsi_sources_from_paths <- function(paths, email = NULL){
   dsi_sources_list(
     lapply(paths, function(x){
-      dsi_source(title = basename(x), path = x, date = file.info(x)$mtime)
+      dsi_source(title = basename(x), path = x, date = file.info(x)$mtime, email = email)
     })
   )
 }
