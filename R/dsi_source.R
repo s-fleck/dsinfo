@@ -90,6 +90,61 @@ dsi_sources_from_paths <- function(paths, email = NULL){
 
 
 
+#' @return `sources()` retrieves the `sources` for one or several objects
+#'   with `dsinfo` attribute, or of dsinfo attributes themselves
+#' @rdname dsinfo
+#' @export
+#' x <- iris
+#' sources(x) <- dsi_source(
+#'   "Fisher, R. A.: The use of multiple measurements in taxonomic problems",
+#'   path = "https://doi.org/10.1111/j.1469-1809.1936.tb02137.x",
+#'   date = 1936
+#' )
+#' sources(x)
+#' # can also be used directly on dsinfo objects
+#' sources(dsinfo(x))
+sources <- function(
+  ...,
+  list = NULL
+){
+  l <- c(list(...), list)
+
+  src <- lapply(l, function(.){
+    if (inherits(., "dsinfo_sources"))
+      .
+    else if (inherits(., "dsinfo_source")){
+      dsi_sources(.)
+    } else {
+      dsinfo(.)$sources
+    }
+  })
+
+  dsi_sources_list(compact(src))
+}
+
+
+
+
+#' @param value Value to assign.
+#' @rdname dsinfo
+#' @export
+`sources<-` <- function(x, value){
+  assert(
+    is_dsinfo_source(value) || is_dsinfo_sources(value),
+    "expected a `dsi_sources` or `dsi_source` objec, not ", preview_object(value)
+  )
+
+  dsi <- dsinfo(x)
+
+  if (inherits(dsi, "dsinfo")){
+    dsi$sources <- value
+    attr(x, "dsinfo") <- dsi
+  } else {
+    x <- set_dsinfo(x, sources = value)
+  }
+
+  x
+}
 
 # printing ----------------------------------------------------------------
 

@@ -1,10 +1,8 @@
 
 #' @return `reference_date()` retrieves the `reference_date` field of the
 #'   `dsinfo` attribute of `x` (or `NULL` if no such attribute exists)
-#'
 #' @rdname dsinfo
 #' @export
-#'
 reference_date <- function(x){
   if (is.null(attr(x, "dsinfo"))){
     return(NULL)
