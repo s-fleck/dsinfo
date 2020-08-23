@@ -27,6 +27,29 @@ test_that("dsi_sources can be concatenated from other dsi_sources", {
     vapply(res, `[[`, character(1), "title"),
     c("foo", "bar", "hash")
   )
+
+
+  r2 <- set_dsinfo(res, sources = res)
+
+
+  expect_identical(res, sources(r2))
+  expect_identical(res, sources(dsinfo(r2)))
+})
+
+
+
+
+test_that("dsi_sources can be consolidated from other dsi_sources", {
+  x <- iris %>% set_dsinfo(sources = dsi_source("foo", email = "foo@corp.at", date = as.Date("2019-12-01")))
+  y <- iris %>% set_dsinfo(sources = dsi_source("foo", email = "foo@corp.at", date = as.Date("2019-12-01")))
+  z <- iris %>% set_dsinfo(sources = dsi_source("foo", email = "foo@corp.at", date = as.Date("2019-12-02")))
+
+  dd <- sources(x, y, z, iris, dsi_source("hash", "baz@corp.at"))
+
+  res <- consolidate_sources(dd)
+
+  res
+
 })
 
 

@@ -109,7 +109,7 @@ dsinfo <- function(x){
 #' @return `set_dsinfo()`, `update_dsinfo()`, and `set_source_script()` return
 #'   `x` with an additional `dsinfo` attribute.
 #' @export
-#' @example
+#' @examples
 #' x <- set_dsinfo(iris, "i001", "iris-dataset", title = "The iris dataset")
 #' dsinfo(x)
 set_dsinfo <- function(

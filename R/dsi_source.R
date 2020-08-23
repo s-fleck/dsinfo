@@ -1,23 +1,25 @@
 #' Create sources for dsinfo
 #'
-#' A source can be a file system path or a person with an email address.
+#' A source can (for example) be a file system path or a person with an email
+#' address. `dsi_source()` is a constructor for a signle `dsinfo_source`, while
+#' `dsi_sources()` is a list of such sources. In addition to the recommendations
+#' of the [data package](https://frictionlessdata.io/data-package/) standard
+#' `dsinfo` sources can also have a `date`.
 #'
-#' `dsi_source()` is a constructor for the component objects that make up a
-#'
-#' @param title Title of the source
-#' @param path Path to the source
-#' @param email Email address of the source
-#' @param date Date of the source
+#' @param title `character` scalar. Title of the source
+#' @param path `character` scalar. Path(s) to the source
+#' @param email `character` scalar. Email address(es) of the source
+#' @param date scalar. Date of the source. Usually [POSIXct] or [Date] but any
+#'   atomic \R scalar is accepted.
 #'
 #' @return  `dsi_source()` returns a `dsinfo_source` object.
 #' @export
 #'
+#' @seealso [sources()] for an alternative way to get and set sources
 #' @examples
-#'
 #' person <- dsi_source("blubb", "blah@@blubb.at")
 #' files  <- dsi_sources_from_paths(c(tempfile(), tempfile(), tempfile()))
-#'
-#' src <- dsi_sources(person, files)
+#' src    <- dsi_sources(person, files)
 #'
 #' x <- set_dsinfo(
 #'   iris,
@@ -26,8 +28,12 @@
 #' )
 #'
 #' dsinfo(x)
-#'
 dsi_source <- function(title, path = NULL, email = NULL, date = NULL){
+  assert(is_scalar_character(title))
+  assert(is.null(path)  || is_scalar_character(path))
+  assert(is.null(email) || is_scalar_character(email))
+  assert(is.null(date)  || is_scalar_atomic(date))
+
   res <- list(title = title, path = path, email = email, date = date)
   attr(res, "class") <- c("dsinfo_source", "list")
   res
@@ -55,9 +61,7 @@ dsi_sources <- function(...){
 
 #' @param sources a list of `dsinfo_source` objects.
 #' @export
-#'
 #' @rdname dsi_source
-#'
 dsi_sources_list <- function(sources){
   sel1 <- vapply(sources, is_dsinfo_source, FALSE)
   sel2 <- vapply(sources, is_dsinfo_sources, FALSE)
@@ -90,10 +94,22 @@ dsi_sources_from_paths <- function(paths, email = NULL){
 
 
 
-#' @return `sources()` retrieves the `sources` for one or several objects
-#'   with `dsinfo` attribute, or of dsinfo attributes themselves
-#' @rdname dsinfo
+#' Get or set dsinfo sources of R objects
+#'
+#' `sources()` and `sources<-()` provide a direct way to get and set the
+#' `$sources` field of a `dsinfo` attribute.
+#'
+#' @param ... usually \R objects with [dsinfo] attributes, Can also handle
+#'   `dsinfo` objects, [dsi_sources], or [dsi_source] objects directly.
+#' @param list a `list` of \R objects like `...`. Will be combined
+#'   with `...` if both are provided.
+#' @param consolidate `logical` scalar. If `TRUE` remove duplicated sources
+#'   from the output
+#'
+#' @seealso [dsi_source()] for more info on `dsinfo_sources` objects.
+#' @return a [dsinfo_sources] object
 #' @export
+#' @examples
 #' x <- iris
 #' sources(x) <- dsi_source(
 #'   "Fisher, R. A.: The use of multiple measurements in taxonomic problems",
@@ -101,32 +117,43 @@ dsi_sources_from_paths <- function(paths, email = NULL){
 #'   date = 1936
 #' )
 #' sources(x)
-#' # can also be used directly on dsinfo objects
-#' sources(dsinfo(x))
+#' # can also be used directly on dsinfo or dsi_source(s) objects.
+#' y <- dsinfo(x)
+#' z <- dsi_source("a dsi_source object")
+#' sources(x, y, z)
+#' sources(x, y, z, consolidate = TRUE)
 sources <- function(
   ...,
-  list = NULL
+  list = NULL,
+  consolidate = FALSE
 ){
+  assert(is_scalar_bool(consolidate))
   l <- c(list(...), list)
 
   src <- lapply(l, function(.){
-    if (inherits(., "dsinfo_sources"))
+    if (is_dsinfo_sources(.))
       .
-    else if (inherits(., "dsinfo_source")){
+    else if (is_dsinfo_source(.)){
       dsi_sources(.)
+    } else if (inherits(., "dsinfo")) {
+      .$sources
     } else {
       dsinfo(.)$sources
     }
   })
 
-  dsi_sources_list(compact(src))
+  src <- dsi_sources_list(compact(src))
+  if (consolidate)
+    consolidate_sources(src)
+  else
+    src
 }
 
 
 
 
 #' @param value Value to assign.
-#' @rdname dsinfo
+#' @rdname sources
 #' @export
 `sources<-` <- function(x, value){
   assert(
@@ -209,8 +236,6 @@ format.dsinfo_source <- function(
 
 # is ----------------------------------------------------------------------
 
-
-
 is_dsinfo_source <- function(x){
   inherits(x, "dsinfo_source")
 }
@@ -224,3 +249,31 @@ is_dsinfo_sources <- function(x){
 
 
 
+
+# utils -------------------------------------------------------------------
+
+consolidate_sources <- function(
+  x
+){
+  assert(is_dsinfo_sources(x))
+
+  res <- vector("list", length(x))
+
+  for (i in seq_along(x)){
+    for (j in seq_along(x)){
+      a <- x[[i]]
+      b <- x[[j]]
+      if (
+        !identical(i, j) &&
+        identical(a$title, b$title) &&
+        identical(a$path, b$path) &&
+        identical(a$email, b$email) &&
+        identical(a$date, b$date)
+      ){
+        x[j] <- list(NULL)
+      }
+    }
+  }
+
+  dsi_sources_list(compact(x))
+}
