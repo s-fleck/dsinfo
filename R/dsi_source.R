@@ -4,10 +4,10 @@
 #'
 #' `dsi_source()` is a constructor for the component objects that make up a
 #'
-#' @param title Title of the source
-#' @param path Path to the source
-#' @param email Email address of the source
-#' @param date Date of the source
+#' @param title `character` scalar. Title of the source
+#' @param path `character` scalar. Path(s) to the source
+#' @param email `character` scalar. Email address(es) of the source
+#' @param date scalar. Date of the source (usually `POSIXct`)
 #'
 #' @return  `dsi_source()` returns a `dsinfo_source` object.
 #' @export
@@ -28,6 +28,11 @@
 #' dsinfo(x)
 #'
 dsi_source <- function(title, path = NULL, email = NULL, date = NULL){
+  assert(is_scalar_character(title))
+  assert(is.null(path)  || is_scalar_character(path))
+  assert(is.null(email) || is_scalar_character(email))
+  assert(is.null(date)  || is_scalar_atomic(date))
+
   res <- list(title = title, path = path, email = email, date = date)
   attr(res, "class") <- c("dsinfo_source", "list")
   res
@@ -209,8 +214,6 @@ format.dsinfo_source <- function(
 
 # is ----------------------------------------------------------------------
 
-
-
 is_dsinfo_source <- function(x){
   inherits(x, "dsinfo_source")
 }
@@ -224,3 +227,31 @@ is_dsinfo_sources <- function(x){
 
 
 
+
+# utils -------------------------------------------------------------------
+
+consolidate_sources <- function(
+  x
+){
+  assert(is_dsinfo_sources(x))
+
+  res <- vector("list", length(x))
+
+  for (i in seq_along(x)){
+    for (j in seq_along(x)){
+      a <- x[[i]]
+      b <- x[[j]]
+      if (
+        !identical(i, j) &&
+        identical(a$title, b$title) &&
+        identical(a$path, b$path) &&
+        identical(a$email, b$email) &&
+        identical(a$date, b$date)
+      ){
+        x[j] <- list(NULL)
+      }
+    }
+  }
+
+  dsi_sources_list(compact(x))
+}

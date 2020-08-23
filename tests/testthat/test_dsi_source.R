@@ -32,6 +32,22 @@ test_that("dsi_sources can be concatenated from other dsi_sources", {
 
 
 
+test_that("dsi_sources can be consolidated from other dsi_sources", {
+  x <- iris %>% set_dsinfo(sources = dsi_source("foo", email = "foo@corp.at", date = as.Date("2019-12-01")))
+  y <- iris %>% set_dsinfo(sources = dsi_source("foo", email = "foo@corp.at", date = as.Date("2019-12-01")))
+  z <- iris %>% set_dsinfo(sources = dsi_source("foo", email = "foo@corp.at", date = as.Date("2019-12-02")))
+
+  dd <- sources(x, y, z, iris, dsi_source("hash", "baz@corp.at"))
+
+  res <- consolidate_sources(dd)
+
+  res
+
+})
+
+
+
+
 test_that("accessing and setting sources with sources() works", {
   x <- iris
   sources(x) <- dsi_source("test1")
