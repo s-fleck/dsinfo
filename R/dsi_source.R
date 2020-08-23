@@ -275,5 +275,7 @@ consolidate_sources <- function(
     }
   }
 
-  dsi_sources_list(compact(x))
+  res <- compact(x)
+  res <- res[order(vapply(res, `[[`, character(1), "title"))]
+  dsi_sources_list(res)
 }
