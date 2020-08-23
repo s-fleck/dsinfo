@@ -182,7 +182,7 @@ format.dsinfo_source <- function(
   if (!is.null(x$date)){
     title <- paste(
       x$title,
-      style_subtle(paste0("(", x$date, ")"))
+      style_subtle(paste0("(", format(x$date), ")"))
     )
   } else {
     title <- x$title
