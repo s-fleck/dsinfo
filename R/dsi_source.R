@@ -7,10 +7,10 @@
 #' `dsinfo` sources can also have a `date`.
 #'
 #' @param title `character` scalar. Title of the source
-#' @param path `character` scalar. Path(s) to the source
-#' @param email `character` scalar. Email address(es) of the source
-#' @param date scalar. Date of the source. Usually [POSIXct] or [Date] but any
-#'   atomic \R scalar is accepted.
+#' @param path `character` vector. Path(s) to the source
+#' @param email `character` vector. Email address(es) of the source
+#' @param date vector. Date of the source; usually [POSIXct] or [Date] but any
+#'   atomic \R vector is accepted.
 #'
 #' @return  `dsi_source()` returns a `dsinfo_source` object.
 #' @export
@@ -31,8 +31,8 @@
 dsi_source <- function(title, path = NULL, email = NULL, date = NULL){
   assert(is_scalar_character(title))
   assert(is.null(path)  || is_scalar_character(path))
-  assert(is.null(email) || is_scalar_character(email))
-  assert(is.null(date)  || is_scalar_atomic(date))
+  assert(is.null(email) || is.character(email))
+  assert(is.null(date)  || is.atomic(date))
 
   res <- list(title = title, path = path, email = email, date = date)
   attr(res, "class") <- c("dsinfo_source", "list")
