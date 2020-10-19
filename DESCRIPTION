@@ -1,7 +1,7 @@
 Type: Package
 Package: dsinfo
 Title: Metadata for R Objects
-Version: 0.0.4
+Version: 0.0.5
 Authors@R: 
     person(given = "Stefan",
            family = "Fleck",
